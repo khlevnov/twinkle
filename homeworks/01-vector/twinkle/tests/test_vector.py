@@ -1,4 +1,5 @@
 import numpy as np
+from math import isclose
 from numpy.testing import assert_allclose
 
 from ..linalg import vector_norm
@@ -26,20 +27,6 @@ def test_len():
     rng = np.random.default_rng()
     for len_ in rng.integers(0, 100, (10,)):
         assert len(Tensor([0] * len_)) == len_
-
-
-def test_eq():
-    assert Tensor([0]) == Tensor([0])
-    assert Tensor([0, 1]) == Tensor([0, 1])
-    assert Tensor([0, 1, 2]) == Tensor([0, 1, 2])
-    assert not Tensor([0, 1, 2]) == Tensor([1, 2, 3])
-    assert not Tensor([0, 1, 2]) == Tensor([2, 3, 4])
-
-    rng = np.random.default_rng()
-    for vec1, vec2 in zip(rng.normal(0, 100, (10, 10)), rng.normal(0, 10, (10, 10))):
-        assert Tensor(vec1) == Tensor(vec1)
-        assert Tensor(vec2) == Tensor(vec2)
-        assert not Tensor(vec1) == Tensor(vec2)
 
 
 def test_getitem():
@@ -192,6 +179,14 @@ def test_gt():
     binary_op(lambda a, b: a > b)
 
 
+def test_eq():
+    binary_op(lambda a, b: a == b)
+
+
+def test_ne():
+    binary_op(lambda a, b: a != b)
+
+
 def test_neg():
     assert_allclose(-Tensor([0]), Tensor([0]), rtol=1e-4)
     assert_allclose(-Tensor([0, 1]), Tensor([0, -1]), rtol=1e-4)
@@ -203,11 +198,11 @@ def test_neg():
 
 
 def test_dot():
-    assert_allclose(Tensor([0]).dot(Tensor([0])), 0.0)
-    assert_allclose(Tensor([0, 1]).dot(Tensor([0, 1])), 1.0)
-    assert_allclose(Tensor([0, 1, 2]).dot(Tensor([0, 1, 2])), 5.0)
+    assert isclose(Tensor([0]).dot(Tensor([0])).item(), 0.0)
+    assert isclose(Tensor([0, 1]).dot(Tensor([0, 1])).item(), 1.0)
+    assert isclose(Tensor([0, 1, 2]).dot(Tensor([0, 1, 2])).item(), 5.0)
 
     rng = np.random.default_rng()
     for vec1, vec2 in zip(rng.normal(0, 100, (10, 10)), rng.normal(0, 10, (10, 10))):
-        assert_allclose(Tensor(vec1).dot(Tensor(vec2)), vec1.dot(vec2), rtol=1e-4)
-        assert_allclose(Tensor(vec2).dot(Tensor(vec1)), vec2.dot(vec1), rtol=1e-4)
+        isclose(Tensor(vec1).dot(Tensor(vec2)).item(), vec1.dot(vec2))
+        isclose(Tensor(vec2).dot(Tensor(vec1)).item(), vec2.dot(vec1))

@@ -8,15 +8,15 @@ def randn(*shape):
     return Tensor([gauss(0, 1) for _ in range(prod(shape))])
 
 
-# Часть 1:
+# Part 1:
 
 def ones(*shape):
-    pass  # Your code here
+    return ...  # Your code here
 
 
 def tensor(data):
-    pass  # Your code here
+    return ...  # Your code here
 
 
 def zeros(*shape):
-    pass  # Your code here
+    return ...  # Your code here
