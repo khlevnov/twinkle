@@ -39,13 +39,21 @@ class Tensor(Iterable):
         pass  # Your code here
 
     def _binary_op(self, other, fn):
-        if isinstance(other, numbers.Number):
-            pass  # Your code here
-        if isinstance(other, Tensor):
-            pass  # Your code here
+        if self._shape == ():
+            if isinstance(other, numbers.Number):
+                return ...  # Your code here
+            if isinstance(other, Tensor):
+                if other._shape == ():
+                    return ...  # Your code here
+                return ...  # Your code here
+        elif isinstance(other, numbers.Number):
+            return ...  # Your code here
+        elif isinstance(other, Tensor):
+            if other._shape == ():
+                return ...  # Your code here
             self._assert_same_shape(other)
-            pass  # Your code here
-        raise TypeError(f"unsupported operand type(s) for +: 'Tensor' and '{type(other)}'")
+            return ...  # Your code here
+        raise TypeError(f"unsupported operand type(s): 'Tensor' and '{type(other)}'")
 
     def add(self, other):
         pass  # Your code here
