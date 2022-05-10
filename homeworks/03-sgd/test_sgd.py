@@ -12,7 +12,7 @@ from MaxAbsScaler import MaxAbsScaler
 from MinMaxScaler import MinMaxScaler
 from SGDRegressor import SGDRegressor
 from StandardScaler import StandardScaler
-from metrics import mean_absolute_error, mean_squared_error
+from metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
 def load_synthetic_dataset(intercept=True, n_features=10, n_objects=20, seed=42):
@@ -935,5 +935,17 @@ class TestSampleWeights:
 
 
 class TestR2Score:
-    def test_r2_score(self):
-        pytest.skip('not implemented')
+    def test_r2_score_set1(self):
+        assert np.allclose(r2_score(np.array([3, -0.5, 2, 7]), np.array([2.5, 0.0, 2, 8])), 0.94, atol=5e-2)
+        assert np.allclose(r2_score(np.array([42, 10, -4.5]), np.array([1, 14, -6.3])), -0.50, atol=5e-2)
+        assert np.allclose(r2_score(np.array([100, 10, 1, -5]), np.array([0, 0, -150, 7])), -3.51, atol=5e-2)
+        assert np.allclose(r2_score(np.array([0, 1, 1, 4, 10]), np.array([0, 1, 2, 5, 10])), 0.97, atol=5e-2)
+        assert np.allclose(r2_score(np.array([0, 1, 2, 4]), np.array([0, 1, 1, 4])), 0.88, atol=5e-2)
+        assert np.allclose(r2_score(np.array([[0.5, 1], [-1, 1], [7, -6]]), np.array([[0, 2], [-1, 2], [8, -5]])), \
+                           [0.96, 0.90], atol=5e-2)
+        
+    def test_r2_score_set2(self):
+        assert r2_score(np.array([0, 1, 2, 3]), np.array([3, 2, 1, 0])) == -3.0
+        assert r2_score(np.array([0, 0, 0, 1]), np.array([0, 0, 0, 1])) == 1.0
+        assert r2_score(np.array([0, 1]), np.array([1])) == -1.0
+        assert r2_score(np.array([0, 1, 2]), np.array([0, 1, 1])) == 0.5
