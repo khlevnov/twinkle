@@ -931,7 +931,27 @@ class TestWarmStart:
 
 class TestSampleWeights:
     def test_no_weights(self):
-        pytest.skip('not implemented')
+        X = np.array([[0.1, 0.2, -0.5, 4.2], [1.8, 3, -3, 3],
+                     [0.3, -0.4, 0.8, 1.2], [2.5, -0.6, -4, 4.4],
+                     [0.2, -1, 3, 2.6], [0.8, 2.1, -0.6, 4.5],
+                     [0.5, 0.8, -1, 1.5], [1.1, 1.5, -0.5, 2.7],
+                     [1.2, 2.4, 0.9, 3.3], [0.2, 1, 2, 2.5]])
+        y = np.array([8, 6.2, 4.1, 8.5, 5.8, 7.7, 7.5, 5.8, 7.9, 6])
+        reg = SGDRegressor(max_iter = 1, shuffle = False)
+        reg.fit(X, y)
+        assert np.allclose(reg.coef_, [1.1377027,  0.95004997, 0.72993306, 1.3813918 ], atol = 5e-2)
+        
+    def test_weights_on(self):
+        X = np.array([[0.1, 0.2, -0.5, 4.2], [1.8, 3, -3, 3],
+                     [0.3, -0.4, 0.8, 1.2], [2.5, -0.6, -4, 4.4],
+                     [0.2, -1, 3, 2.6], [0.8, 2.1, -0.6, 4.5],
+                     [0.5, 0.8, -1, 1.5], [1.1, 1.5, -0.5, 2.7],
+                     [1.2, 2.4, 0.9, 3.3], [0.2, 1, 2, 2.5]])
+        y = np.array([8, 6.2, 4.1, 8.5, 5.8, 7.7, 7.5, 5.8, 7.9, 6])
+        sw = np.array([1, 1, 5, 1, 1, 1, 5, 1, 1, 1])
+        reg = SGDRegressor(max_iter = 1, shuffle = False)
+        reg.fit(X, y, sw)
+        assert np.allclose(reg.coef_, [1.21755424, 1.01816228, 0.58502814, 1.64047953], atol = 5e-2)
 
 
 class TestR2Score:
